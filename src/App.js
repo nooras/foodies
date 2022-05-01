@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+// import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Posts from './components/Posts'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import Modal from '@material-ui/core/Modal';
@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, Input } from '@material-ui/core';
 import axios from 'axios'
 import React, {useState, useEffect} from 'react';
-import ImageUpload from './ImageUpload';
+// import ImageUpload from './ImageUpload';
 // import express from 'express';
 // const webpack = require('webpack');
 // module.exports = function override(config, env) {
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2,4,3),
   }
 }));
-const BASE_URL = '/';
+// const BASE_URL = '/dsad';
 
 function App() {
 
@@ -71,18 +71,18 @@ function App() {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = useState(false);
   const [openSignIn, setOpenSignIn] = useState(false);
-  const [uid, setUid] = useState('');
+  // const [uid, setUid] = useState('');
   const [uname, setUname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
   const [user, setUser] = useState("");
-  const [users, setUsers] = useState("");
+  // const [users, setUsers] = useState("");
   const [error, setError] = useState("");
-  const [images, setImages] = useState([]);
-  const [imageUrls, setImageUrls] = useState([]);
-  const [message, setMessage] = useState("");
+  // const [images, setImages] = useState([]);
+  // const [imageUrls, setImageUrls] = useState([]);
+  // const [message, setMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState();
 	const [isSelected, setIsSelected] = useState(false);
   // const [state, setState] = useState({
@@ -90,7 +90,7 @@ function App() {
   //     imageUrls: [],
   //     message: ''
   // })
-  let finalData;
+  // let finalData;
   const fetchData = async () => {
     // fetchUserDetails()
     console.log("Hello")
@@ -144,8 +144,8 @@ function App() {
     const results = await axios.post('.netlify/functions/searchUser',{ email: { $eq: email } })
     if(Object.keys(results.data).length === 1){
       const userDetails = results.data[Object.keys(results.data)];
-      if(userDetails.password == password){
-        setUid(Object.keys(results.data));
+      if(userDetails.password === password){
+        // setUid(Object.keys(results.data));
         setUname(userDetails.name);
         setUsername(userDetails.username);
         setEmail(userDetails.email);
@@ -162,35 +162,35 @@ function App() {
     }
   }
 
-  const signOut =  (event) =>{
-    event.preventDefault();
-  }
+  // const signOut =  (event) =>{
+  //   event.preventDefault();
+  // }
 
- const selectFiles = (event) => {
-    let images = [];
-    for (var i = 0; i < event.target.files.length; i++) {
-          images[i] = event.target.files.item(i);
-      }
-      images = images.filter(image => image.name.match(/\.(jpg|jpeg|png|gif)$/))
-      let message = `${images.length} valid image(s) selected`
-      let imageUrls = []
-      console.log(images, message, imageUrls)
-      // setState({ images, message, imageUrls})
-      setImages(images);
-      setMessage(message);
-  }
+//  const selectFiles = (event) => {
+//     let images = [];
+//     for (var i = 0; i < event.target.files.length; i++) {
+//           images[i] = event.target.files.item(i);
+//       }
+//       images = images.filter(image => image.name.match(/\.(jpg|jpeg|png|gif)$/))
+//       let message = `${images.length} valid image(s) selected`
+//       let imageUrls = []
+//       console.log(images, message, imageUrls)
+//       // setState({ images, message, imageUrls})
+//       setImages(images);
+//       setMessage(message);
+//   }
 
-  const uploadImages = () => {
+  // const uploadImages = () => {
   
-    console.log(images)
-    const uploaders = images.map(image => {
-      const data = new FormData();
-      console.log(data)
-      data.append("image", image, image.name);
-      console.log(data, "dsadsd");
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "./netlify/upload/" + image.name)
-      xhr.send(data)
+  //   console.log(images)
+  //   const uploaders = images.map(image => {
+  //     const data = new FormData();
+  //     console.log(data)
+  //     data.append("image", image, image.name);
+  //     console.log(data, "dsadsd");
+  //     var xhr = new XMLHttpRequest();
+  //     xhr.open("POST", "./netlify/upload/" + image.name)
+  //     xhr.send(data)
       // Make an AJAX upload request using Axios
       // return axios.post(BASE_URL + 'upload', data)
       // .then(response => {
@@ -205,16 +205,16 @@ function App() {
     //   images[0].name
     // ); 
     // console.log(formData);
-  });
+  // });
 
    // Once all the files are uploaded 
-  axios.all(uploaders).then(() => {
-    console.log('done');
-  }).catch(err => alert(err.message));
+  // axios.all(uploaders).then(() => {
+  //   console.log('done');
+  // }).catch(err => alert(err.message));
 
-  }
+  // }
 
-  const upload = () => {
+  // const upload = () => {
     // router.post('/upload', (req, res) => {
     //   return res.json({status: 'OK'})
     // })
@@ -224,7 +224,7 @@ function App() {
     // app.post('/upload', (req, res) => {
     //   return res.json({status: 'OK'})
     // })
-  }
+  // }
 
   const changeHandler = (event) => {
     console.log(event.target.files[0])
