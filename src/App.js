@@ -4,9 +4,17 @@ import Posts from './components/Posts'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Input } from '@material-ui/core';
+import { Button, Input, TextareaAutosize } from '@material-ui/core';
 import axios from 'axios'
 import React, {useState, useEffect} from 'react';
+import cloudinary from "cloudinary/lib/cloudinary";
+import Logo from "./assets/img/foodies.gif"
+
+cloudinary.config({
+  cloud_name: 'noorfa',
+  api_key: '332851398966561',
+  api_secret: 'wbfBla4KNqLNO-eOPjTEUXBRPt0'
+});
 // import ImageUpload from './ImageUpload';
 // import express from 'express';
 // const webpack = require('webpack');
@@ -55,6 +63,17 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2,4,3),
   }
 }));
+
+const postUseStyles = makeStyles((theme) => ({
+  paper:{
+    position: 'absolute',
+    width: 600,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2,4,3),
+  }
+}));
 // const BASE_URL = '/dsad';
 
 function App() {
@@ -68,9 +87,11 @@ function App() {
     // }
 // }
   const classes = useStyles();
+  const postClasses = postUseStyles();
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = useState(false);
   const [openSignIn, setOpenSignIn] = useState(false);
+  const [openPost, setOpenPost] = useState(false);
   // const [uid, setUid] = useState('');
   const [uname, setUname] = useState('');
   const [username, setUsername] = useState('');
@@ -162,6 +183,10 @@ function App() {
     }
   }
 
+  const newPost =  async (event) =>{
+    event.preventDefault();
+  }
+
   // const signOut =  (event) =>{
   //   event.preventDefault();
   // }
@@ -226,32 +251,94 @@ function App() {
     // })
   // }
 
-  const changeHandler = (event) => {
-    console.log(event.target.files[0])
-		setSelectedFile(event.target.files[0]);
-		setIsSelected(true);
-	};
+  // const changeHandler = (event) => {
+  //   console.log(event.target.files[0])
+	// 	setSelectedFile(event.target.files[0]);
+	// 	setIsSelected(true);
+	// };
 
-	const handleSubmission = () => {
-		const formData = new FormData();
+	// const handleSubmission = () => {
+	// 	const formData = new FormData();
+  //   const headers = new Headers();
+  //   headers.append('Origin','http://localhost:8888');
 
-		formData.append('File', selectedFile);
+	// 	formData.append('File', selectedFile);
 
-		fetch(
-			'https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5',
-			{
-				method: 'POST',
-				body: formData,
-			}
-		)
-			.then((response) => response.json())
-			.then((result) => {
-				console.log('Success:', result);
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-	};
+		// fetch(
+		// 	'https://freeimage.host/api/1/upload/?key=6d207e02198a847aa98d0a2a901485a5',
+		// 	{
+    //     mode: 'no-cors',
+    //     credentials: 'include',
+		// 		method: 'POST',
+		// 		body: formData,
+    //     headers: headers,
+		// 	}
+		// )
+//     fetch('https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5', {
+//       mode: 'no-cors',
+//   // key: '6d207e02198a847aa98d0a2a901485a5',
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json'
+//   },
+//   body: formData,
+// })
+// 			.then((response) => response)
+// 			.then((result) => {
+// 				console.log('Success:', result);
+// 			})
+// 			.catch((error) => {
+// 				console.error('Error:', error);
+// 			});
+// 	};
+// var imagekit = new ImageKit({
+//   publicKey : "your_public_api_key",
+//   urlEndpoint : "https://ik.imagekit.io/your_imagekit_id",
+//   authenticationEndpoint : "https://www.yourserver.com/auth"
+// });
+
+// Upload function internally uses the ImageKit.io javascript SDK
+// function upload(data) {
+//   var file = document.getElementById("file1");
+//   imagekit.upload({
+//       file : file.files[0],
+//       fileName : "abc.jpg",
+//       tags : ["tag1"]
+//   }, function(err, result) {
+//       console.log(arguments);
+//       console.log(imagekit.url({
+//           src: result.url,
+//           transformation : [{ height: 300, width: 400}]
+//       }));
+//   })
+// }
+
+const[img,setImg] = useState("");
+  const[imageData,setimageData] = useState({url: "", public_id: ""});
+ 
+  const updateImage = (e)=>{
+      setImg(e.target.files[0]);
+  }
+ 
+  const uploadImage = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("file", img);
+    data.append("upload_preset","foodies");
+    data.append("cloud_name","noorfa" );
+    data.append("folder","foodies");
+    try{
+      const foodies = "noorfa";
+      const resp = await axios.post(`https://api.cloudinary.com/v1_1/${foodies}/image/upload/`,data);  
+      setimageData({url: resp.data.url, public_id: resp.data.public_id});
+    }catch(err){
+      console.log("errr : ",err);
+    }
+  }
+
+  if(imageData){
+    console.log(imageData['url']);
+  }
   
   return (
     <div className="App">
@@ -260,11 +347,10 @@ function App() {
         onClose={() => setOpen(false)}
       >
          <div style={modalStyle} className={classes.paper}>
-          {/* <h2>I am Modal modal modal</h2> */}
           <form className="app_signup">
               <center>
                 <img className="logoImage" 
-                  src={require("./assets/img/foodies.gif")}
+                  src={Logo}
                   alt="logo_image" width={300}></img>
               </center>
               <Input
@@ -298,11 +384,10 @@ function App() {
         onClose={() => setOpenSignIn(false)}
       >
          <div style={modalStyle} className={classes.paper}>
-          {/* <h2>I am Modal modal modal</h2> */}
           <form className="app_signup">
               <center>
                 <img className="logoImage" 
-                  src={require("./assets/img/foodies.gif")}
+                  src={Logo}
                   alt="logo_image" width={300}>
                 </img>
               </center>
@@ -325,11 +410,52 @@ function App() {
           </form>
         </div>
       </Modal>
+
+      <Modal
+        open={openPost}
+        onClose={() => setOpenPost(false)}
+      >
+         <div style={modalStyle} className={postClasses.paper}>
+          <form className="app_signup">
+              <center>
+                NEW POST
+              </center>
+              <Input
+                fullWidth={true}
+                placeholder="Food Name / Caption" 
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <TextareaAutosize
+                style={{ width: "100%" }}
+                placeholder="Recepie Instructions" 
+                minRows={4}
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                fullWidth={true}
+                placeholder="Tags" 
+                type="text"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <input type="file" onChange={updateImage} className="form-control shadow-sm" id="image" name="image" accept="image/*"/>
+              {/* <button onClick={uploadImage}>Upload</button> */}
+              <Button type="submit" onClick={newPost}>Post</Button>
+              <div>
+                {error && (<p>{error}</p>)}
+              </div>
+          </form>
+        </div>
+      </Modal>
+
       <div className="navbar px-4">
         <img className="logoImage" 
-        src={require("./assets/img/foodies.gif")}
+        src={Logo}
         alt="logo_image" width={300}></img>
-
         {/* { user ? (
           <div className="loginContainer">
             <Button className="btn" onClick={() => signOut()}>Logout</Button>
@@ -342,21 +468,12 @@ function App() {
         {/* )
         } */}
       </div>
-      hiiiii
-      {/* <div>
-        <Login finalData={finalData} />
-        {finalData[0]}
-      {finalData && finalData.map((finalD) => (
-        <div>{finalD.name}</div>
-      ))}
-      </div> */}
       {
         user && <div>
           {bio}
           {email}
           {username}
           {uname}
-          {/* <h1>{uid}</h1> */}
           </div>
       }
       <div className='p-2 m-2'>
@@ -367,7 +484,8 @@ function App() {
         <div className='col-4'>
           {/* <ImageUpload username={uid}/> */}
           <div className="col-sm-12">
-          <input type="file" name="file" onChange={changeHandler} />
+            <Button className="btn" onClick={() => setOpenPost(true)}>NEW POST</Button>
+          {/* <input type="file" name="file" onChange={changeHandler} />
 			{isSelected ? (
 				<div>
 					<p>Filename: {selectedFile.name}</p>
@@ -383,28 +501,8 @@ function App() {
 			)}
 			<div>
 				<button onClick={handleSubmission}>Submit</button>
-			</div>
-        			{/* <h1>Image Uploader</h1><hr/>
-              <input type="file" name="avatar" multiple/>
-              <button onClick={upload}>Submit</button> */}
-	        		{/* <div className="col-sm-4">
-		        		<input className="form-control " type="file" onChange={selectFiles} multiple/>
-		        	</div>
-		        	{ message? <p className="text-info">{message}</p>: ''}
-		        	<br/><br/><br/>
-		        	<div className="col-sm-4">
-		            	<button className="btn btn-primary" value="Submit" onClick={uploadImages}>Submit</button>
-		        	</div>
-	            </div>
-	            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><hr/><br/>
-	            <div className="row col-lg-12">
-		        	{ 
-			          	imageUrls.map((url, i) => (
-				          		<div className="col-lg-2" key={i}>
-				          			<img src={BASE_URL + url} className="img-rounded img-responsive" alt="not available"/><br/>
-				          		</div>
-				          	))
-			        } */}
+			</div> */}
+        			
 		        </div>
         </div>
         </div>
