@@ -1,4 +1,8 @@
-.App {
+.imagePost{
+  height: 100%; width: 100%; object-fit: contain
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +39,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
