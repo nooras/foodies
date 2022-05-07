@@ -1,7 +1,21 @@
 // import Roll from 'react-reveal/Roll';
 import loginImage from '../assets/img/login.png'
+import '../App.css'
 
-function Posts(finalData) {
+function Posts(data) {
+    console.log("-------------")
+    const post = data['allPosts'];
+    // const half = Math.ceil(Object.keys(post).length/2);
+    // const col1Post = dict(list(post.items())[len(d)//2:])
+    // for()
+    // const row1 = post[len(post)/2:]
+    // Object.keys(post).forEach(function(key) {
+    //     if(post[key]['imageUrl'] && post[key]['userId']){
+    //         console.log(key, dictionary[key]);
+    //     }
+    // });
+
+    console.log(post)
     return (
         <div className="login row mx-0">
           {/* <div className="container h-100">
@@ -24,16 +38,38 @@ function Posts(finalData) {
             {/* {finalData.map((finalD) => (
         <div>{finalD.name}</div>
         ))} */}
-        {/* {finalData.map(home => <div>{home.name}</div>)} */}
-            <div className='col-6 px-0'>
-                hiii
-                <img src={loginImage} className='imagePost' alt='img'/>
-            </div>
-            <div className='col-6 px-0'>
-                hiii
-                <img src={loginImage} className='imagePost' alt='img'/>
+         {/* {
+          posts.map(({id, post}) => (
+            <Post key={id} postId={id} user={user} username={post.username} caption={post.caption} imageURL={post.imageURL}/>
+          ))
+        } */}
+        {Object.keys(post).map((key, index) => (
+            
+            <div className='col-6 p-2 my-2' style={{height:500}} >
+                {post[key]['imageUrl'] && post[key]['userId'] ? 
+                <div className='xxx border my-2'  style={{height:500, backgroundColor:'#000'}} >
+                    {/* {post[key]['caption']} */}
+                    {/* <div className='row m-0' style={{position:'relative', backgroundImage: `linear-gradient(to top, rgba(255,0,0,0), rgba(0,0,0,1)`}}>
+                        <p style={{color:'#d0cbcb'}} className='py-2'>{post[key]['caption']}</p>
+                    </div> */}
+                    <img src={post[key]['imageUrl']} className='imagePost' width={100} height={100} alt='img'/>
+                    <div className='userInfo row m-0' style={{position:'relative', top:-40, backgroundImage: `linear-gradient(to top, rgba(0,0,0,1), rgba(255,0,0,0)`}}>
+                            <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"/><circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/></svg>
+                            <p className='para col-6' >Username</p>
+                            <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v13M5 12l7 7 7-7"/></svg>
+                    </div>
+                </div> : <div></div>}
+                
             </div>
             
+            // <div className='col-6 px-0'>
+            //     hiii
+            //     <img src={loginImage} className='imagePost' alt='img'/>
+            // </div>
+        ))}
+            
+            {}
         </div>
         );
     }

@@ -6,10 +6,10 @@ let id = faker.random.uuid();
 
 exports.handler = async function (event) {
   const posts = await postsCollection();
-  const body = JSON.parse(event.body);
+  // const body = JSON.parse(event.body);
   
   try {
-    const user = await posts.create(id, body.data);
+    const user = await posts.create(id, event.body);
     return {
       statusCode: 200,
       body: JSON.stringify(user),

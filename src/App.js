@@ -100,7 +100,12 @@ function App() {
   const [bio, setBio] = useState('');
   const [user, setUser] = useState("");
   // const [users, setUsers] = useState("");
+  const [caption, setCaption] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
   const [error, setError] = useState("");
+  const[img,setImg] = useState("");
+  const[allPosts,setAllPosts] = useState("");
   // const [images, setImages] = useState([]);
   // const [imageUrls, setImageUrls] = useState([]);
   // const [message, setMessage] = useState("");
@@ -115,6 +120,14 @@ function App() {
   const fetchData = async () => {
     // fetchUserDetails()
     console.log("Hello")
+    await axios.get('.netlify/functions/getPosts')
+      .then((response) => {
+        console.log(response)
+        setAllPosts(response.data);
+        })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   useEffect(() => {
@@ -164,6 +177,7 @@ function App() {
     console.log("SIGN IN")
     const results = await axios.post('.netlify/functions/searchUser',{ email: { $eq: email } })
     if(Object.keys(results.data).length === 1){
+      // console.log(Object.keys(results.data))
       const userDetails = results.data[Object.keys(results.data)];
       if(userDetails.password === password){
         // setUid(Object.keys(results.data));
@@ -171,7 +185,7 @@ function App() {
         setUsername(userDetails.username);
         setEmail(userDetails.email);
         setBio(userDetails.bio);
-        setUser(userDetails);
+        setUser(results.data);
         setOpenSignIn(false);
       } else {
         setError("Invalid Password")
@@ -183,8 +197,57 @@ function App() {
     }
   }
 
+  if(user){
+    console.log(Object.keys(user))
+  }
+
+  const[imageData,setimageData] = useState({url: "", public_id: ""});
+ 
+  const updateImage = (e)=>{
+      setImg(e.target.files[0]);
+  }
+
   const newPost =  async (event) =>{
     event.preventDefault();
+    const data = new FormData();
+    data.append("file", img);
+    data.append("upload_preset","foodies");
+    data.append("cloud_name","noorfa" );
+    data.append("folder","foodies");
+    try{
+      const foodies = "noorfa";
+      const resp = await axios.post(`https://api.cloudinary.com/v1_1/${foodies}/image/upload/`,data);  
+      setimageData({url: resp.data.url, public_id: resp.data.public_id});
+      // console.log(resp.data.url);
+      if(resp.data.url){
+        const body = {
+          userId: Object.keys(user),
+          caption: caption,
+          description: description,
+          tags: tags,
+          imageUrl: resp.data.url,
+        }
+        await axios.post('.netlify/functions/addPost', body)
+        .then((response) => {
+          console.log(response)
+          })
+        .catch((err) => {
+          console.error(err)
+        })
+      }
+      setOpenPost(false);
+    }catch(err){
+      console.log("errr : ",err);
+    }
+  }
+
+  const uploadImage = async (e) => {
+    e.preventDefault();
+    
+  }
+
+  if(imageData){
+    console.log(imageData['url']);
   }
 
   // const signOut =  (event) =>{
@@ -313,32 +376,8 @@ function App() {
 //   })
 // }
 
-const[img,setImg] = useState("");
-  const[imageData,setimageData] = useState({url: "", public_id: ""});
- 
-  const updateImage = (e)=>{
-      setImg(e.target.files[0]);
-  }
- 
-  const uploadImage = async (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("file", img);
-    data.append("upload_preset","foodies");
-    data.append("cloud_name","noorfa" );
-    data.append("folder","foodies");
-    try{
-      const foodies = "noorfa";
-      const resp = await axios.post(`https://api.cloudinary.com/v1_1/${foodies}/image/upload/`,data);  
-      setimageData({url: resp.data.url, public_id: resp.data.public_id});
-    }catch(err){
-      console.log("errr : ",err);
-    }
-  }
 
-  if(imageData){
-    console.log(imageData['url']);
-  }
+  
   
   return (
     <div className="App">
@@ -424,25 +463,28 @@ const[img,setImg] = useState("");
                 fullWidth={true}
                 placeholder="Food Name / Caption" 
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                className="my-2"
               />
               <TextareaAutosize
                 style={{ width: "100%" }}
                 placeholder="Recepie Instructions" 
                 minRows={4}
                 type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="my-2"
               />
               <Input
                 fullWidth={true}
                 placeholder="Tags" 
                 type="text"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                className="my-2"
               />
-              <input type="file" onChange={updateImage} className="form-control shadow-sm" id="image" name="image" accept="image/*"/>
+              <input type="file" onChange={updateImage} className="form-control shadow-sm my-2" id="image" name="image" accept="image/*"/>
               {/* <button onClick={uploadImage}>Upload</button> */}
               <Button type="submit" onClick={newPost}>Post</Button>
               <div>
@@ -479,7 +521,7 @@ const[img,setImg] = useState("");
       <div className='p-2 m-2'>
         <div className='row'>
         <div className='col-8'>
-          <Posts />
+         { allPosts ? <Posts allPosts={allPosts} /> : <div>No Post</div>}
         </div>
         <div className='col-4'>
           {/* <ImageUpload username={uid}/> */}

@@ -2,6 +2,16 @@
   height: 100%; width: 100%; object-fit: contain
 }
 
+.userInfo svg, p{
+  /* display: none; */
+  color: aqua;
+}
+
+.para:hover{
+  display: block;
+ color: #fff;
+}
+
 /* .App {
   text-align: center;
 }

@@ -1,13 +1,14 @@
 const { postsCollection } = require("./utils/astraClient");
 
 exports.handler = async function () {
-  const users = await postsCollection();
+  const allPosts = await postsCollection();
   try {
-    const res = await users.find({});
+    const res = await allPosts.find({});
     const posts = res.data;
     return {
       statusCode: 200,
-      body: JSON.stringify(Object.keys(posts).map((i) => posts[i] )),
+      body: JSON.stringify(posts),
+      // body: JSON.stringify(Object.keys(posts).map((i) => posts[i] )),
     };
   } catch (e) {
     console.error(e);
