@@ -106,6 +106,8 @@ function App() {
   const [error, setError] = useState("");
   const[img,setImg] = useState("");
   const[allPosts,setAllPosts] = useState("");
+  const[allUsers,setAllUsers] = useState("");
+  const[allData,setAllData] = useState("");
   // const [images, setImages] = useState([]);
   // const [imageUrls, setImageUrls] = useState([]);
   // const [message, setMessage] = useState("");
@@ -119,15 +121,32 @@ function App() {
   // let finalData;
   const fetchData = async () => {
     // fetchUserDetails()
+    let allPosts ;
+    let allUsers ;
     console.log("Hello")
     await axios.get('.netlify/functions/getPosts')
       .then((response) => {
         console.log(response)
-        setAllPosts(response.data);
+        allPosts = response.data;
+        })
+      .catch((err) => {
+        console.error(err)
+    })
+    await axios.get('.netlify/functions/getUsers')
+      .then((response) => {
+        console.log(response)
+        allUsers = response.data;
         })
       .catch((err) => {
         console.error(err)
       })
+    if(allPosts && allUsers){
+          const data = {
+            allPosts: allPosts,
+            allUsers: allUsers
+          }
+          setAllData(data);
+    }
   }
 
   useEffect(() => {
@@ -147,6 +166,13 @@ function App() {
   // console.log(finalData , "finallllll")
 
   // setUser("Nooras");
+  // if(allPosts && allUsers){
+  //   const data = {
+  //     allPosts: allPosts,
+  //     allUsers: allUsers
+  //   }
+  //   setAllData(data);
+  // }
 
   const signUp = async (event) =>{
     event.preventDefault();
@@ -521,7 +547,7 @@ function App() {
       <div className='p-2 m-2'>
         <div className='row'>
         <div className='col-8'>
-         { allPosts ? <Posts allPosts={allPosts} /> : <div>No Post</div>}
+         { allData ? <Posts allData={allData} /> : <div>No Post</div>}
         </div>
         <div className='col-4'>
           {/* <ImageUpload username={uid}/> */}

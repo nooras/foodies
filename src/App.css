@@ -3,13 +3,19 @@
 }
 
 .userInfo svg, p{
+  /* color: #fff;
+  stroke: #fff; */
+  /* background: -webkit-linear-gradient(#eee, #333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+  /* background: -webkit-linear-gradient(#eee, #333); */
   /* display: none; */
-  color: aqua;
+  /* color: linear-gradient(to top, rgba(0,0,0,1), rgba(255,0,0,0)); */
 }
 
 .para:hover{
-  display: block;
- color: #fff;
+  /* display: block; */
+ /* color: #fff; */
 }
 
 /* .App {
