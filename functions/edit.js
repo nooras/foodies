@@ -1,11 +1,15 @@
-const { getCollection } = require("./utils/astraClient");
+const { postsCollection } = require("./utils/astraClient");
 
 exports.handler = async function (event) {
-  const users = await getCollection();
-  const body = JSON.parse(event.body);
+  const users = await postsCollection();
+  const d = new Date();
+  let time = d.toLocaleString();
+  const body = {
+    username: "noousername",
+  }
 
   try {
-    users.update(body.userId, body.data);
+    users.update("73b506f2-626e-4849-9b65-ac279e134407", body);
     return {
       statusCode: 200,
     };

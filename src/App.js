@@ -9,12 +9,16 @@ import axios from 'axios'
 import React, {useState, useEffect} from 'react';
 import cloudinary from "cloudinary/lib/cloudinary";
 import Logo from "./assets/img/foodies.gif"
+import { ReactSession } from 'react-client-session';
 
 cloudinary.config({
   cloud_name: 'noorfa',
   api_key: '332851398966561',
   api_secret: 'wbfBla4KNqLNO-eOPjTEUXBRPt0'
 });
+
+ReactSession.setStoreType("localStorage");
+
 // import ImageUpload from './ImageUpload';
 // import express from 'express';
 // const webpack = require('webpack');
@@ -92,6 +96,7 @@ function App() {
   const [open, setOpen] = useState(false);
   const [openSignIn, setOpenSignIn] = useState(false);
   const [openPost, setOpenPost] = useState(false);
+  const [openHome, setOpenHome] = useState(false);
   // const [uid, setUid] = useState('');
   const [uname, setUname] = useState('');
   const [username, setUsername] = useState('');
@@ -119,41 +124,89 @@ function App() {
   //     message: ''
   // })
   // let finalData;
-  const fetchData = async () => {
-    // fetchUserDetails()
-    let allPosts ;
-    let allUsers ;
-    console.log("Hello")
-    await axios.get('.netlify/functions/getPosts')
+
+  const pageSize = 3
+  const [pageState, setPageState] = useState(null)
+
+  const fetchUser = async () => {
+     await axios.get('.netlify/functions/getUsers')
       .then((response) => {
-        console.log(response)
-        allPosts = response.data;
-        })
-      .catch((err) => {
-        console.error(err)
-    })
-    await axios.get('.netlify/functions/getUsers')
-      .then((response) => {
-        console.log(response)
-        allUsers = response.data;
+        // console.log(response)
+        setAllUsers(response.data);
         })
       .catch((err) => {
         console.error(err)
       })
-    if(allPosts && allUsers){
-          const data = {
-            allPosts: allPosts,
-            allUsers: allUsers
-          }
-          setAllData(data);
-    }
   }
 
+  const fetchData = async () => {
+      const body =  {
+        pageState: pageState, 
+        pageSize: pageSize
+      }
+      await axios.post('.netlify/functions/getPostsPageSize',body)
+      .then((responseBody) => {
+        setPageState(responseBody.data.pageState)
+        setAllPosts({...allPosts, ...responseBody.data.data});
+        })
+      .catch((err) => {
+        console.error(err)
+      })
+
+    // let allPosts ;
+    // let allUsers ;
+    // console.log("Hello")
+    // await axios.get('.netlify/functions/getPosts')
+    //   .then((response) => {
+    //     // console.log(response)
+    //     allPosts = response.data;
+    //     })
+    //   .catch((err) => {
+    //     console.error(err)
+    // })
+    // await axios.get('.netlify/functions/getUsers')
+    //   .then((response) => {
+    //     // console.log(response)
+    //     allUsers = response.data;
+    //     })
+    //   .catch((err) => {
+    //     console.error(err)
+    //   })
+    // if(allPosts && allUsers){
+    //       const data = {
+    //         allPosts: allPosts,
+    //         allUsers: allUsers
+    //       }
+    //       setAllData(data);
+    // }
+  }
+
+  // useEffect(() => {
+    // we trigger the first page of genres at the beginning
+    // setRequestedPage(1)
+  // }, [])
+
+  // useEffect(() => {
+    // const goalItems = pageSize * requestedPage
+    // console.log(allPosts, "allpossstttttt")
+    // const currentItems = (allPosts || []).length
+    // const bottomReached = currentItems > 0 && pageState === null
+    // // we ask for more genres if we are not at bottom of infinite scroll
+    // // (and if there are less items than the nominally requested pages)
+    // console.log(goalItems, currentItems, bottomReached, requestedPage)
+    // if ((goalItems > currentItems) && !bottomReached){
+      // fetchData()
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
+
   useEffect(() => {
+    fetchUser()
     fetchData()
   }, [])
 
 
+  console.log(allPosts, "outtterPost")
   // console.log(user);
   // if(Object.keys(user).length === 1){
   //   console.log(user, "hiiii")
@@ -190,6 +243,7 @@ function App() {
       await axios.post('.netlify/functions/addUser',body)
       .then((response) => {
         console.log(response)
+        ReactSession.set("user", response.data)
         })
       .catch((err) => {
         console.error(err)
@@ -212,6 +266,7 @@ function App() {
         setEmail(userDetails.email);
         setBio(userDetails.bio);
         setUser(results.data);
+        ReactSession.set("user", results.data)
         setOpenSignIn(false);
       } else {
         setError("Invalid Password")
@@ -223,8 +278,24 @@ function App() {
     }
   }
 
+  const signOut = () => {
+    localStorage.clear();
+    window.location.reload();
+  }
+
+  if(ReactSession.get('user') && user == ""){
+    // console.log(Object.keys(user));
+    const user = ReactSession.get('user');
+    const userDetails = user[Object.keys(user)]
+    setUser(user)
+    setUname(userDetails.name);
+    setUsername(userDetails.username);
+    setEmail(userDetails.email);
+    setBio(userDetails.bio);
+    ;
+  }
   if(user){
-    console.log(Object.keys(user))
+    console.log(user, "USERRRRRRRR");
   }
 
   const[imageData,setimageData] = useState({url: "", public_id: ""});
@@ -246,12 +317,16 @@ function App() {
       setimageData({url: resp.data.url, public_id: resp.data.public_id});
       // console.log(resp.data.url);
       if(resp.data.url){
+        const d = new Date();
+        let time = d.toLocaleString();
         const body = {
           userId: Object.keys(user),
+          username: username,
           caption: caption,
           description: description,
           tags: tags,
           imageUrl: resp.data.url,
+          created_at: time,
         }
         await axios.post('.netlify/functions/addPost', body)
         .then((response) => {
@@ -270,6 +345,45 @@ function App() {
   const uploadImage = async (e) => {
     e.preventDefault();
     
+  }
+
+  const profile = async(event) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append("file", img);
+    data.append("upload_preset","foodies");
+    data.append("cloud_name","noorfa" );
+    data.append("folder","profile");
+    try{
+      const foodies = "noorfa";
+      const resp = await axios.post(`https://api.cloudinary.com/v1_1/${foodies}/image/upload/`,data);  
+      setimageData({url: resp.data.url, public_id: resp.data.public_id});
+      // console.log(resp.data.url);
+      if(resp.data.url){
+        const d = new Date();
+        let time = d.toLocaleString();
+        const data = {
+          bio: bio,
+          profilePicUrl: resp.data.url,
+          created_at: time,
+        }
+        const body = {
+          id: Object.keys(user),
+          data: data
+        }
+        await axios.post('.netlify/functions/updateProfile', body)
+        .then((response) => {
+          // console.log(response)
+          ReactSession.set("user", response.data)
+          })
+        .catch((err) => {
+          console.error(err)
+        })
+      }
+      setOpenHome(false);
+    }catch(err){
+      console.log("errr : ",err);
+    }
   }
 
   if(imageData){
@@ -520,24 +634,92 @@ function App() {
         </div>
       </Modal>
 
+      {/* Home */}
+      <Modal
+        open={openHome}
+        onClose={() => setOpenHome(false)}
+      >
+         <div style={modalStyle} className={postClasses.paper}>
+          <form className="app_signup">
+              <center>
+                Profile
+              </center>
+              <div className='row'>
+                <div className='col-3'>
+                  Username:
+                </div>
+                <div className='col-9'>
+                  {username}
+                </div>
+              </div>
+              <div className='row'>
+                <div className='col-3'>
+                  Email:
+                </div>
+                <div className='col-9'>
+                  {email}
+                </div>
+              </div>
+              <div className='row'>
+                <div className='col-3'>
+                  Name:
+                </div>
+                <div className='col-9'>
+                  {uname}
+                </div>
+              </div>
+              <div className='row'>
+                <div className='col-3'>
+                  Bio:
+                </div>
+                <div className='col-9'>
+                <TextareaAutosize
+                  style={{ width: "100%" }}
+                  placeholder="Bio" 
+                  minRows={4}
+                  type="text"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  className="my-2"
+                />
+                </div>
+              </div>
+              <div className='row'>
+                <div className='col-3'>
+                  Add Profile Pic:
+                </div>
+                <div className='col-9'>
+                <input type="file" onChange={updateImage} className="form-control shadow-sm my-2" id="image" name="image" accept="image/*"/>
+                </div>
+              </div>
+              {/* <button onClick={uploadImage}>Upload</button> */}
+              <Button type="submit" onClick={profile}>Update Profile</Button>
+              <div>
+                {error && (<p>{error}</p>)}
+              </div>
+          </form>
+        </div>
+      </Modal>
+
       <div className="navbar px-4">
         <img className="logoImage" 
         src={Logo}
         alt="logo_image" width={300}></img>
-        {/* { user ? (
+        { user ? (
           <div className="loginContainer">
+            <Button className="btn" onClick={() => setOpenHome(true)}>Home</Button>
             <Button className="btn" onClick={() => signOut()}>Logout</Button>
           </div>
-        ):( */}
+        ):(
           <div className="loginContainer">
             <Button className="btn" onClick={() => setOpenSignIn(true)}>Sign In</Button>
             <Button className="btn" onClick={() => setOpen(true)}>Sign Up</Button>
           </div>
-        {/* )
-        } */}
+         )
+        } 
       </div>
       {
-        user && <div>
+        user && <div>Hii
           {bio}
           {email}
           {username}
@@ -547,7 +729,15 @@ function App() {
       <div className='p-2 m-2'>
         <div className='row'>
         <div className='col-8'>
-         { allData ? <Posts allData={allData} /> : <div>No Post</div>}
+         {/* { allData ? <Posts allData={allData} /> : <div>No Post</div>} */}
+         { allPosts && allUsers ? <Posts allPosts={allPosts} allUsers={allUsers} /> : <div>No Post</div>}
+         {/* <Button className="btn" onClick={() => fetchData()}>Load</Button> */}
+         <div
+        className="page-end"
+        onMouseOver={() => {
+          fetchData()
+        }}
+      />
         </div>
         <div className='col-4'>
           {/* <ImageUpload username={uid}/> */}

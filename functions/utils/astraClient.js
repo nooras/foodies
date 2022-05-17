@@ -30,4 +30,21 @@ const postsCollection = async () => {
     .collection("posts");
 };
 
-module.exports = { getAstraClient, userCollection, postsCollection };
+const postsPageSize = async (pageSize, pageState) => {
+  // a = '1';
+  // b= 'JDUwZTY5ZmQ3LWIzNDAtNDBmMS1hMDhjLWI4N2QzZjRmYjJkNwDwf_____B_____'
+  const documentClient = await getAstraClient();
+  if(pageState == "" || pageState == null){
+    return documentClient
+    .namespace(process.env.ASTRA_DB_KEYSPACE)
+    .collection("posts?page-size=" + pageSize)
+  } else {
+    return documentClient
+    .namespace(process.env.ASTRA_DB_KEYSPACE)
+    .collection("posts?page-size=" + pageSize + "&page-state=" + pageState)
+  }
+    // .collection("posts?page-size=2&page-state=JGRjNWEzODAxLWQ5M2MtNDRkYi05OTkyLWYzMjY3ZTY5OWJkYgDwf_____B_____")
+    // .url("/api/rest/v2/namespaces/foodies/collections/posts?page-size=1");
+};
+
+module.exports = { getAstraClient, userCollection, postsCollection, postsPageSize };
