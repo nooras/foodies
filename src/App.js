@@ -168,7 +168,7 @@ function App() {
   useEffect(() => {
     fetchUser();
     fetchData();
-  },[])
+  },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const signUp = async (event) =>{
     event.preventDefault();

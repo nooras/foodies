@@ -97,7 +97,7 @@ function Posts(data) {
             <div  key={key} className='col-6 p-2 my-2' style={{height:500}} >
               {/* {users[posts[key]['userId']]['email']} */}
                 {posts[key]['imageUrl'] && posts[key]['userId'] ? 
-                <a onClick={() => openPost(key)} >
+                <div onClick={() => openPost(key)} >
                 <div className='xxx border my-2'  style={{height:500, backgroundColor:'#000', borderRadius:'10px'}} >
                     <img src={posts[key]['imageUrl']} className='imagePost' width={100} height={100} alt='img'/>
                     <div className='userInfo row m-0' style={{position:'relative', top:-40, backgroundImage: `linear-gradient(to top, rgba(0,0,0,1), rgba(255,0,0,0)`, borderRadius:'inherit'}}>
@@ -107,7 +107,7 @@ function Posts(data) {
                             <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v13M5 12l7 7 7-7"/></svg>
                     </div>
                 </div> 
-                </a>: <div></div>}
+                </div>: <div></div>}
                 
             </div>
         ))}
