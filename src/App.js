@@ -30,6 +30,18 @@ function getModalStyle(){
   };
 }
 
+function getModalStyle2(){
+  const top = 50;
+  const left = 50;
+
+  return{
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+    backgroundImage: `linear-gradient(to bottom right, rgb(191, 236, 250), rgb(248, 194, 248))`,
+  };
+}
+
 const useStyles = makeStyles((theme) => ({
   paper:{
     position: 'absolute',
@@ -58,6 +70,7 @@ function App() {
   const classes = useStyles();
   const postClasses = postUseStyles();
   const [modalStyle] = React.useState(getModalStyle);
+  const [modalStyle2] = React.useState(getModalStyle2);
   const [open, setOpen] = useState(false);
   const [openSignIn, setOpenSignIn] = useState(false);
   const [openPost, setOpenPost] = useState(false);
@@ -467,7 +480,7 @@ function App() {
         open={openPost}
         onClose={() => setOpenPost(false)}
       >
-         <div style={modalStyle} className={postClasses.paper}>
+         <div style={modalStyle2} className={postClasses.paper}>
           <form className="app_newpost">
               <center>
                 NEW POST
@@ -516,7 +529,7 @@ function App() {
         open={openHome}
         onClose={() => setOpenHome(false)}
       >
-         <div style={modalStyle} className={postClasses.paper}>
+         <div style={modalStyle2} className={postClasses.paper}>
           <form className="app_profile">
               <center>
                 PROFILE
