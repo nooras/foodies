@@ -430,7 +430,7 @@ function App() {
         onClose={() => setOpenSignIn(false)}
       >
          <div style={modalStyle} className={classes.paper}>
-          <form className="app_signup">
+          <form className="app_signin">
               <center>
                 <img className="logoImage" 
                   src={Logo}
@@ -462,7 +462,7 @@ function App() {
         onClose={() => setOpenPost(false)}
       >
          <div style={modalStyle} className={postClasses.paper}>
-          <form className="app_signup">
+          <form className="app_newpost">
               <center>
                 NEW POST
               </center>
@@ -585,13 +585,14 @@ function App() {
         alt="logo_image" width={300}></img>
         { user ? (
           <div className="loginContainer">
-            <Button className="btn" onClick={() => setOpenHome(true)}>Home</Button>
-            <Button className="btn" onClick={() => signOut()}>Logout</Button>
+            <Button className="btn" onClick={() => setOpenPost(true)} style={{border: '3px solid rgb(205, 213, 248)'}}>NEW POST</Button>	
+            <Button className="btn mx-2" onClick={() => setOpenHome(true)} style={{border: '3px solid rgb(205, 213, 248)'}}>Home</Button>
+            <Button className="btn" onClick={() => signOut()} style={{border: '3px solid rgb(205, 213, 248)'}}>Logout</Button>
           </div>
         ):(
           <div className="loginContainer">
-            <Button className="btn" onClick={() => setOpenSignIn(true)}>Sign In</Button>
-            <Button className="btn" onClick={() => setOpen(true)}>Sign Up</Button>
+            <Button className="btn mx-2" onClick={() => setOpenSignIn(true)} style={{border: '3px solid rgb(205, 213, 248)'}}>Sign In</Button>
+            <Button className="btn" onClick={() => setOpen(true)} style={{border: '3px solid rgb(205, 213, 248)'}}>Sign Up</Button>
           </div>
          )
         } 
@@ -614,15 +615,25 @@ function App() {
         onMouseOver={() => {
           fetchData()
         }}
-      />
+      /><center>Hover here to load...</center> 
         </div>
         <div className='col-4'>
+          {/* <center>
           <div className="col-sm-12">
-            <Button className="btn" onClick={() => setOpenPost(true)}>NEW POST</Button>	
-		        </div>
+            
+		      </div>
+          </center> */}
+          <div className="col-sm-12 mx-2 my-4 p-4 " style={{border: '3px solid rgb(205, 213, 248)'}}>
+            <h4>Trending Hashtags</h4>
+            <p>#foods</p>
+            <p>#foodies</p>
+            <p>#travel</p>
+            <p>#pizza</p>
+		      </div>
         </div>
         </div>
       </div>
+      <div style={{backgroundColor: '#000', color: '#fff'}}><center>Developed by @Nooras Fatima</center></div>
     </div>
   );
 }

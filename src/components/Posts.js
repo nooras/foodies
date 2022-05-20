@@ -66,20 +66,20 @@ function Posts(data) {
               <div className='row p-0 m-0'>
                   <div className='col-6'>
                     {/* {currentPost['caption']} */}
-                    <div className='border'>
-                      <div className='border mx-0 px-0' style={{height:500, backgroundColor:'#000'}}> 
+                    <div style={{border: '3px solid rgb(205, 213, 248)'}}>
+                      <div className='mx-0 px-0' style={{height:500, backgroundColor:'#000', borderBottom: '3px solid rgb(205, 213, 248)'}}> 
                         <img src={currentPost['imageUrl']} className='imagePost' width={100} height={100} alt='img'/>
                       </div>
                       <div className='userInfo row my-1' style={{position:'relative'}}>
                               <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"/><circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/></svg>
-                              <p className='para col-6' style={{color: '#000'}} >{currentPost['username']}</p>
+                              <p className='para col-8' style={{color: '#000'}} >{currentPost['username']}</p>
                               <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                              <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v13M5 12l7 7 7-7"/></svg>
+                              {/* <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v13M5 12l7 7 7-7"/></svg> */}
                       </div>
                     </div>
                   </div>
                   <div className='col-6'>
-                    <div className='border p-2' style={{height:'550px', overflow:'auto'}}>
+                    <div className='p-2' style={{height:'550px', overflow:'auto', border: '3px solid rgb(205, 213, 248)'}}>
                     <p style={{fontWeight:'bold'}}>{currentPost['caption']}</p>
                     <p>{currentPost['description']}</p>
                     <p>{currentPost['tags']}</p>
@@ -102,9 +102,9 @@ function Posts(data) {
                     <img src={posts[key]['imageUrl']} className='imagePost' width={100} height={100} alt='img'/>
                     <div className='userInfo row m-0' style={{position:'relative', top:-40, backgroundImage: `linear-gradient(to top, rgba(0,0,0,1), rgba(255,0,0,0)`, borderRadius:'inherit'}}>
                             <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"/><circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/></svg>
-                            <p className='para col-6' style={{color: '#d0cbcb'}} >{posts[key]['username']}</p>
+                            <p className='para col-8' style={{color: '#d0cbcb'}} >{posts[key]['username']}</p>
                             <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                            <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v13M5 12l7 7 7-7"/></svg>
+                            {/* <svg className='col-2' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d0cbcb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v13M5 12l7 7 7-7"/></svg> */}
                     </div>
                 </div> 
                 </div>: <div></div>}
