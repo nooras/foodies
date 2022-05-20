@@ -1,6 +1,6 @@
 # Foodies
 
-- Live Site in Progress: https://foodies-astra.netlify.app/
+- Live Site: https://foodies-astra.netlify.app/
 
 # Features:
 
