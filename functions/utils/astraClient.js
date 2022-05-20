@@ -9,6 +9,7 @@ const getAstraClient = async () => {
         astraDatabaseId: process.env.ASTRA_DB_ID,
         astraDatabaseRegion: process.env.ASTRA_DB_REGION,
         applicationToken: process.env.ASTRA_DB_APPLICATION_TOKEN,
+        baseUrl: 'https://4f4b2e1a-960b-40a7-a7b1-4a2aa91f4383-asia-south1.apps.astra.datastax.com'
       },
       30000
     );
