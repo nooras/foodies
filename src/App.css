@@ -4,7 +4,7 @@
 
 .page-end {
   width: 100%;
-  height: 80px;
+  height: 70px;
 }
 
 .imageProfile{
@@ -28,3 +28,8 @@
 .ProfileButton{
   border: 3px solid #fff;
 }
+ .trend {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+ }
+
+

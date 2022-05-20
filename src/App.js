@@ -173,7 +173,7 @@ function App() {
   const signUp = async (event) =>{
     event.preventDefault();
     const body = {
-      name: username,
+      name: uname,
       username: username,
       email:email,
       password:password,
@@ -400,24 +400,30 @@ function App() {
                   alt="logo_image" width={300}></img>
               </center>
               <Input
-                placeholder="username" 
+                placeholder="Name" 
+                type="text"
+                value={uname}
+                onChange={(e) => setUname(e.target.value)}
+              />
+              <Input
+                placeholder="Username" 
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
               <Input
-                placeholder="email" 
+                placeholder="Email" 
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Input
-                placeholder="password" 
+                placeholder="Password" 
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button type="submit" onClick={signUp}>Sign up</Button>
+              <Button className='mx-2' type="submit" onClick={signUp} style={{border: '3px solid rgb(205, 213, 248)'}}>Sign up</Button>
               <div>
                 {error && (<p>{error}</p>)}
               </div>
@@ -449,7 +455,7 @@ function App() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button type="submit" onClick={signIn}>Sign In</Button>
+              <Button className='mx-2' type="submit" onClick={signIn} style={{border: '3px solid rgb(205, 213, 248)'}}>Sign In</Button>
               <div>
                 {error && (<p>{error}</p>)}
               </div>
@@ -609,21 +615,10 @@ function App() {
         <div className='row'>
         <div className='col-8'>
          {/* { allData ? <Posts allData={allData} /> : <div>No Post</div>} */}
-         { allPosts && allUsers ? <Posts allPosts={allPosts} allUsers={allUsers} /> : <div>No Post</div>}
-         <div
-        className="page-end"
-        onMouseOver={() => {
-          fetchData()
-        }}
-      /><center>Hover here to load...</center> 
+         { allPosts && allUsers ? <div><Posts allPosts={allPosts} allUsers={allUsers} /><div className="page-end pt-4" onMouseOver={() => { fetchData() }}><center>Hover here to load...</center> </div></div> : <div>No Post</div>}
         </div>
         <div className='col-4'>
-          {/* <center>
-          <div className="col-sm-12">
-            
-		      </div>
-          </center> */}
-          <div className="col-sm-12 mx-2 my-4 p-4 " style={{border: '3px solid rgb(205, 213, 248)'}}>
+          <div className="trend col-sm-12 mx-2 my-4 p-4 " style={{border: '3px solid rgb(205, 213, 248)'}}>
             <h4>Trending Hashtags</h4>
             <p>#foods</p>
             <p>#foodies</p>
@@ -633,7 +628,7 @@ function App() {
         </div>
         </div>
       </div>
-      <div style={{backgroundColor: '#000', color: '#fff'}}><center>Developed by @Nooras Fatima</center></div>
+      <div style={{backgroundColor: '#000', color: '#fff', width:'100%', bottom:'0'}}><center>Developed by @<a href="https://noorasfatima.netlify.app/">Nooras Fatima</a></center></div>
     </div>
   );
 }
