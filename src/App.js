@@ -93,7 +93,7 @@ function App() {
   const [pageState, setPageState] = useState(null)
 
   const fetchUser = async () => {
-     await axios.get('.netlify/functions/getUsers')
+     await axios.get('/.netlify/functions/getUsers')
       .then((response) => {
         // console.log(response)
         setAllUsers(response.data);
@@ -108,7 +108,7 @@ function App() {
         pageState: pageState, 
         pageSize: pageSize
       }
-      await axios.post('.netlify/functions/getPostsPageSize',body)
+      await axios.post('/.netlify/functions/getPostsPageSize',body)
       .then((responseBody) => {
         setPageState(responseBody.data.pageState)
         setAllPosts({...allPosts, ...responseBody.data.data});
@@ -146,7 +146,7 @@ function App() {
   }
 
   const fetchUpdatedUser = async () => {
-    await axios.post('.netlify/functions/searchUser',{ email: { $eq: email } })
+    await axios.post('/.netlify/functions/searchUser',{ email: { $eq: email } })
     .then((results) => {
     if(Object.keys(results.data).length === 1){
       const userDetails = results.data[Object.keys(results.data)];
@@ -179,7 +179,7 @@ function App() {
       password:password,
       bio:"",
     }
-    const results = await axios.post('.netlify/functions/searchUser',{ email: { $eq: email } })
+    const results = await axios.post('/.netlify/functions/searchUser',{ email: { $eq: email } })
     if(Object.keys(results.data).length === 1){
       setError("Email already present!! Try with another email")
     } else {
@@ -198,7 +198,7 @@ function App() {
   const signIn = async (event) =>{
     event.preventDefault();
     console.log("SIGN IN")
-    const results = await axios.post('.netlify/functions/searchUser',{ email: { $eq: email } })
+    const results = await axios.post('/.netlify/functions/searchUser',{ email: { $eq: email } })
     if(Object.keys(results.data).length === 1){
       // console.log(Object.keys(results.data))
       const userDetails = results.data[Object.keys(results.data)];
@@ -264,7 +264,7 @@ function App() {
           created_at: time,
         }
         setProgressValue(75);
-        await axios.post('.netlify/functions/addPost', body)
+        await axios.post('/.netlify/functions/addPost', body)
         .then((response) => {
           console.log(response)
           setProgressValue(100);
@@ -313,7 +313,7 @@ function App() {
           id: Object.keys(user),
           data: data
         }
-        await axios.post('.netlify/functions/updateProfile', body)
+        await axios.post('/.netlify/functions/updateProfile', body)
         .then((response) => {
             console.log(response, "In await")
             //Retrieving updated data
@@ -337,7 +337,7 @@ function App() {
     const body = {
       id: Object.keys(user),
     }
-    await axios.post('.netlify/functions/deleteProfilePic', body)
+    await axios.post('/.netlify/functions/deleteProfilePic', body)
     .then((response) => {
         console.log(response, "In delete")
         if(response.status === 200){
