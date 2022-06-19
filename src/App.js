@@ -12,9 +12,9 @@ import Logo from "./assets/img/foodies.gif"
 import { ReactSession } from 'react-client-session';
 
 cloudinary.config({
-  cloud_name: 'noorfa',
-  api_key: '332851398966561',
-  api_secret: 'wbfBla4KNqLNO-eOPjTEUXBRPt0'
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret
 });
 
 ReactSession.setStoreType("localStorage");
@@ -63,7 +63,6 @@ const postUseStyles = makeStyles((theme) => ({
     padding: theme.spacing(2,4,3),
   }
 }));
-// const BASE_URL = '/dsad';
 
 function App() {
 
@@ -75,14 +74,12 @@ function App() {
   const [openSignIn, setOpenSignIn] = useState(false);
   const [openPost, setOpenPost] = useState(false);
   const [openHome, setOpenHome] = useState(false);
-  // const [uid, setUid] = useState('');
   const [uname, setUname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
   const [user, setUser] = useState("");
-  // const [users, setUsers] = useState("");
   const [caption, setCaption] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
@@ -91,25 +88,15 @@ function App() {
   const[imgProfile,setImgProfile] = useState("");
   const[allPosts,setAllPosts] = useState("");
   const[allUsers,setAllUsers] = useState("");
-  // const[allData,setAllData] = useState("");
   const[openProgress,setOpenProgress] = useState(false);
   const[progressValue, setProgressValue] = useState("");
   const[signUpMsg, setSignUpMsg] = useState("");
-  // const[imageData,setimageData] = useState({url: "", public_id: ""});
-  // const [images, setImages] = useState([]);
-  // const [imageUrls, setImageUrls] = useState([]);
-  // const [message, setMessage] = useState("");
-  // const [selectedFile, setSelectedFile] = useState();
-	// const [isSelected, setIsSelected] = useState(false);
-
-
   const pageSize = 6;
   const [pageState, setPageState] = useState(null)
 
   const fetchUser = async () => {
      await axios.get('/.netlify/functions/getUsers')
       .then((response) => {
-        // console.log(response)
         setAllUsers(response.data);
         })
       .catch((err) => {
@@ -170,6 +157,7 @@ function App() {
       setBio(userDetails.bio);
       setUser(results.data);
       setImg(userDetails.profilePicUrl)
+      // console.log(results.data);
       ReactSession.set("user", results.data)
       console.log("fetching...")
       }
